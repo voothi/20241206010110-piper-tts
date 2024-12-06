@@ -5,6 +5,7 @@ def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
     parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German)')
+    parser.add_argument('--speaker', type=int, required=True, help='Speaker ID (e.g., 0, 4536)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
     args = parser.parse_args()
     
@@ -20,7 +21,7 @@ def main():
     else:
         print(f"Unsupported language: {args.lang}. Please use 'en' or 'de'.")
         return
-
+    
     output_file = 'output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
@@ -29,7 +30,7 @@ def main():
         '--model', model_path,
         '--config', config_path,
         '--output_file', output_file,
-        '--speaker', '0'  # Added speaker parameter
+        '--speaker', str(args.speaker)  # Use the speaker parameter from arguments
     ]
 
     # Synthesize the speech
