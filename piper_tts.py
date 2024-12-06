@@ -5,7 +5,7 @@ def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
     parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German)')
-    parser.add_argument('--speaker', type=int, required=True, help='Speaker ID (e.g., 0, 4536)')
+    parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
     args = parser.parse_args()
     
