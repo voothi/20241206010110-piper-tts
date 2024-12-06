@@ -29,7 +29,7 @@ def main():
         '--model', model_path,
         '--config', config_path,
         '--output_file', output_file,
-        '--speaker', '4536'  # Added speaker parameter
+        '--speaker', '0'  # Added speaker parameter
     ]
 
     # Synthesize the speech
