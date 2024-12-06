@@ -4,7 +4,7 @@ import argparse
 def main():
     # Set up argument parsing
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
-    parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German)')
+    parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German, "ru" for Russian)')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
     args = parser.parse_args()
@@ -18,13 +18,15 @@ def main():
         piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
         model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_DE-thorsten-high.onnx'
         config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_de_DE_thorsten_high_de_DE-thorsten-high.onnx.json'
-        # model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\mls\medium\de_DE-mls-medium.onnx'
-        # config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\mls\medium\de_de_DE_mls_medium_de_DE-mls-medium.onnx.json'
+    elif args.lang == 'ru':
+        piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
+        model_path = r'C:\Tools\piper-tts\piper-voices\ru\ru_RU\irina\medium\ru_RU-irina-medium.onnx'
+        config_path = r'C:\Tools\piper-tts\piper-voices\ru\ru_RU\irina\medium\ru_RU-irina-medium.onnx.json'
     else:
-        print(f"Unsupported language: {args.lang}. Please use 'en' or 'de'.")
+        print(f"Unsupported language: {args.lang}. Please use 'en', 'de', or 'ru'.")
         return
     
-    output_file = 'C:\Tools\piper-tts\output.wav'
+    output_file = r'C:\Tools\piper-tts\output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
@@ -34,7 +36,7 @@ def main():
         '--output_file', output_file,
         '--speaker', str(args.speaker)  # Use the speaker parameter from arguments
     ]
-
+    
     # Synthesize the speech
     print(f'Synthesizing text: "{args.text}"')
     
