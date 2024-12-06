@@ -13,11 +13,16 @@ def main():
     if args.lang == 'en':
         piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
         model_path = r'C:\Tools\piper-tts\piper-voices\en\en_US\ljspeech\high\en_US-ljspeech-high.onnx'
-        config_path = r'C:\Tools\piper-tts\piper-voices\en\en_US\ljspeech\high\en_en_US_ljspeech_high_en_US-ljspeech-high.onnx.json'
+        config_path = r'C:\Tools\piper-tts\piper-voices\en\en_US\ljspeech\high\en_US-ljspeech-high.onnx.json'
     elif args.lang == 'de':
         piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
-        model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_DE-thorsten-high.onnx'
-        config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_de_DE_thorsten_high_de_DE-thorsten-high.onnx.json'
+        # model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_DE-thorsten-high.onnx'
+        # config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\thorsten\high\de_DE-thorsten-high.onnx.json'
+        model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\pavoque\low\de_DE-pavoque-low.onnx'
+        config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\pavoque\low\de_DE-pavoque-low.onnx.json'
+        # model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\mls\medium\de_DE-mls-medium.onnx'
+        # config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\mls\medium\de_DE-mls-medium.onnx.json'
+
     elif args.lang == 'ru':
         piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
         model_path = r'C:\Tools\piper-tts\piper-voices\ru\ru_RU\irina\medium\ru_RU-irina-medium.onnx'
