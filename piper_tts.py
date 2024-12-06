@@ -24,7 +24,7 @@ def main():
         print(f"Unsupported language: {args.lang}. Please use 'en' or 'de'.")
         return
     
-    output_file = 'output.wav'
+    output_file = 'C:\Tools\piper-tts\output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
