@@ -22,13 +22,14 @@ def main():
         return
 
     output_file = 'output.wav'
-
-    # Create the command to run the Piper TTS
+    
+    # Create the command to run the Piper TTS with the --speaker option
     command = [
         piper_path,
         '--model', model_path,
         '--config', config_path,
-        '--output_file', output_file
+        '--output_file', output_file,
+        '--speaker', '4536'  # Added speaker parameter
     ]
 
     # Synthesize the speech
