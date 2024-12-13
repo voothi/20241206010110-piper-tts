@@ -8,7 +8,8 @@ def main():
     parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German, "ru" for Russian)')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
-    parser.add_argument('--save-only-to', type=str, nargs='?', const=True, default=None, help='Path to save audio output without playback')
+    parser.add_argument('--save-only', action='store_true', help='Save audio output without playback')
+
     args = parser.parse_args()
     
     # Define paths based on language
@@ -28,13 +29,14 @@ def main():
         print(f"Unsupported language: {args.lang}. Please use 'en', 'de', or 'ru'.")
         return
     
-    # Determine output file path
-    if args.save_only_to:
-        output_file = args.save_only_to
-    else:
+        # Determine output file path
+    if args.save_only:
         # Generate timestamp in the format YYYYMMDDHHMMSS for output file
         timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        output_file = f'C:\\Tools\\piper-tts\\output_{timestamp}.wav'
+        output_file = f'C:\\Tools\\piper-tts\\{timestamp}-output.wav'
+        print(f"Audio will be saved to: {output_file}")
+    else:
+        output_file = r'C:\Tools\piper-tts\output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
@@ -42,7 +44,7 @@ def main():
         '--model', model_path,
         '--config', config_path,
         '--output_file', output_file,
-        '--speaker', str(args.speaker)  # Use the speaker parameter from arguments
+        '--speaker', str(args.speaker)
     ]
     
     # Synthesize the speech
@@ -51,8 +53,8 @@ def main():
     # Call Piper TTS
     subprocess.run(command, input=args.text, text=True)
     
-    if not args.save_only_to:
-        # Play the output audio using ffplay only if save_only_to is not used
+    if not args.save_only:
+        # Play the output audio using ffplay only if save_only is not used
         ffplay_path = r'C:\Tools\ffmpeg\ffmpeg-7.1-essentials_build\bin\ffplay.exe'
         play_command = [ffplay_path, '-nodisp', '-autoexit', output_file]
         print(f'Playing audio: {output_file}')

@@ -5,15 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run Piper TTS with German Text and Only Save To",
+            "name": "Run Piper TTS with German Text",
             "type": "python",
             "request": "launch",
             "program": "C:\\Tools\\piper-tts\\piper_tts.py", // Path to your script
             "console": "integratedTerminal",
             "args": [
-                "--save-only-to", // Specify a valid output file path
-                "--lang", "de",
-                "--text", "Willkommen in der Welt der Sprachsynthese!"
+                "--lang",
+                "de",
+                "--text",
+                "Willkommen in der Welt der Sprachsynthese!"
+            ]
+        },
+        {
+            "name": "Run Piper TTS with German Text with Save Only",
+            "type": "python",
+            "request": "launch",
+            "program": "C:\\Tools\\piper-tts\\piper_tts.py", // Path to your script
+            "console": "integratedTerminal",
+            "args": [
+                "--save-only",
+                "--lang",
+                "de",
+                "--text",
+                "Pünktlich sein kannst du wohl nicht? - Die Antwort wird dir nicht gefallen. Die Antwort kenne ich schon. - Ich habe den Bus verpasst. - Sicher. Bei Brad fährt kein Bus. Du hast dort übernachtet und den Wecker nicht gehört. Ich schlief nicht mit ihm. - Mädel, entweder da ist was... - Ich habe den Bus verpasst. Entweder du hast ein ernsthaftes Problem, oder Brad hat eins. Irgendwas stimmt nicht. Es ist alles okay mit ihm. - Sag mir, dass du da absolut sicher bist. Melanie, ich muss los. - Du lügst. - Ich würde dich nie anlügen. Guten Morgen. Guten Morgen, Miss Rebecca. - Ist jeder auf seinem Platz? - Ja. Na gut. Sidney, erzähle uns mal, was du dieses Wochenende gemacht hast. Komm schon, Sidney, du bist doch nicht schüchtern. Warum sollen wir immer was erzählen? Erzählen Sie uns doch, was Sie machten. Okay. Ich hatte ein super Wochenende, aber das dürft ihr nicht Miss Melanie verraten. - Was haben Sie denn gemacht? Ich habe einen neuen Freund. Es macht Spaß, Freundschaften zu schließen. Ja. - Haben Sie Ihrer Mom vom Freund erzählt? Aber klar habe ich das. Ihr solltet nie vor euren Eltern Geheimnisse haben."
             ]
         }
     ]
