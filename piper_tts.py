@@ -8,7 +8,7 @@ def main():
     parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German, "ru" for Russian)')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
-    parser.add_argument('--save-only-to', type=str, default=None, help='Path to save audio output without playback')
+    parser.add_argument('--save-only-to', type=str, nargs='?', const=True, default=None, help='Path to save audio output without playback')
     args = parser.parse_args()
     
     # Define paths based on language
@@ -32,9 +32,9 @@ def main():
     if args.save_only_to:
         output_file = args.save_only_to
     else:
-        # Generate timestamp in the format YYYYMMDDHHMMSS
+        # Generate timestamp in the format YYYYMMDDHHMMSS for output file
         timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        output_file = f'C:\\Tools\\piper-tts\\{timestamp}-output.wav'
+        output_file = f'C:\\Tools\\piper-tts\\output_{timestamp}.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
