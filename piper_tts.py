@@ -1,5 +1,6 @@
 import subprocess
 import argparse
+from datetime import datetime
 
 def main():
     # Set up argument parsing
@@ -31,7 +32,9 @@ def main():
     if args.save_only_to:
         output_file = args.save_only_to
     else:
-        output_file = r'C:\Tools\piper-tts\output.wav'
+        # Generate timestamp in the format YYYYMMDDHHMMSS
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        output_file = f'C:\\Tools\\piper-tts\\{timestamp}-output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
