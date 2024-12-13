@@ -8,7 +8,7 @@ def main():
     parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German, "ru" for Russian)')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, required=True, help='Text to synthesize')
-    parser.add_argument('--save-only-to', type=str, help='Path to save audio output without playback')
+    parser.add_argument('--save-only-to', type=str, default=None, help='Path to save audio output without playback')
     args = parser.parse_args()
     
     # Define paths based on language

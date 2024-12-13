@@ -5,13 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Current File with Arguments",
-            "type": "debugpy",
+            "name": "Run Piper TTS with German Text and Only Save To",
+            "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "C:\\Tools\\piper-tts\\piper_tts.py", // Path to your script
             "console": "integratedTerminal",
             "args": [
-                "${command:pickArgs}"
+                "--save-only-to", // Specify a valid output file path
+                "--lang", "de",
+                "--text", "Willkommen in der Welt der Sprachsynthese!"
             ]
         }
     ]
