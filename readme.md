@@ -2,7 +2,7 @@
 
 A command-line Python script to generate high-quality speech from text using the Piper TTS engine.
 
-[![Version](https://img.shields.io/badge/version-v1.1-blue)](https://github.com/voothi/20241206010110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v1.1-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This utility provides a simple interface to synthesize speech for multiple languages (English, German, Russian) and can be used as a standalone tool or as a backend for other applications, such as the [gTTS Player with Piper Fallback for Anki](https://github.com/voothi/20250421115831-anki-gtts-player).
 
@@ -12,7 +12,7 @@ This utility provides a simple interface to synthesize speech for multiple langu
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [Installation and Setup](#installation-and-setup)
   - [Usage](#usage)
   - [Integration](#integration)
   - [License](#license)
@@ -28,25 +28,65 @@ This utility provides a simple interface to synthesize speech for multiple langu
 
 ## Prerequisites
 
-1.  **Python 3**: Python 3 must be installed on your system.
-2.  **Piper TTS Engine**: The repository includes the Piper executable and voice models. No separate download of Piper is needed.
-3.  **FFplay (Optional)**: For direct audio playback, `ffplay.exe` (part of FFmpeg) should be available on your system.
+1.  **Windows 11**: These instructions are tailored for Windows 11.
+2.  **Python 3**: Python 3 must be installed on your system.
+3.  **FFplay (Optional)**: For direct audio playback, `ffplay.exe` (part of FFmpeg) should be available on your system and ideally in your system's PATH.
 
-## Installation
+## Installation and Setup
 
-1.  Clone this repository:
-    ```bash
-    git clone https://github.com/voothi/20241206010110-piper-tts.git
-    ```
-2.  Navigate to the repository folder:
-    ```bash
-    cd 20241206010110-piper-tts
-    ```
-3.  Install the required Python library:
-    ```bash
-    pip install pyperclip
-    ```
-4.  Test the script from your terminal. Ensure the paths inside `piper_tts.py` are correct for your system if you move the folders.
+The setup involves cloning the script repository and then downloading and placing the Piper engine and voice models into the correct folders.
+
+**Step 1: Clone this Repository**
+```bash
+git clone https://github.com/voothi/202412060110-piper-tts.git
+cd 202412060110-piper-tts
+```
+
+**Step 2: Download Piper Engine and Voices**
+
+Go to the [**Releases Page**](https://github.com/voothi/202412060110-piper-tts/releases) and download the following files:
+-   `piper-windows-amd64.zip`
+-   `piper-voices-en.zip`
+-   `piper-voices-de.zip`
+-   `piper-voices-ru.zip`
+
+**Step 3: Unzip and Organize Files**
+
+You must place the contents of the archives into specific folders inside the cloned repository directory. The final structure must look like the one below.
+
+1.  Inside the `202412060110-piper-tts` folder, create a new folder named `piper`.
+2.  Extract the **contents** of `piper-windows-amd64.zip` directly into this new `piper` folder.
+3.  Back in the main project folder, create another new folder named `piper-voices`.
+4.  Extract the **contents** of `piper-voices-de-en-ru.zip` (which are the `de`, `en`, and `ru` folders) into the `piper-voices` folder.
+
+Your final folder structure should look like this:
+```
+202412060110-piper-tts/
+├── piper/
+│   ├── piper.exe
+│   ├── onnxruntime.dll
+│   └── ... (other required files)
+├── piper-voices/
+│   ├── de/
+│   ├── en/
+│   └── ru/
+├── piper_tts.py
+└── README.md
+```
+
+**Step 4: Install Python Dependencies**
+
+Open a terminal in the project directory and run:
+```bash
+pip install pyperclip```
+
+**Step 5: Test the Installation**
+
+Run a test command to ensure everything is working correctly:
+```bash
+python piper_tts.py --lang en --text "Hello, world."
+```
+You should hear the synthesized audio.
 
 [Back to Top](#table-of-contents)
 
@@ -68,11 +108,8 @@ The script is controlled via command-line arguments.
 # Synthesize German text and play it back immediately
 python piper_tts.py --lang de --text "Hallo, wie geht es Ihnen?"
 
-# Synthesize Russian text from the clipboard and play it back
-python piper_tts.py --lang ru --clipboard
-
-# Synthesize English text and save it to a specific file for Anki (no playback)
-python piper_tts.py --lang en --text "This is a test." --output-file "C:\Users\user\Desktop\anki_audio.wav"
+# Synthesize English text and save it to a specific file (no playback)
+python piper_tts.py --lang en --text "This is a test." --output-file "C:\temp\test_audio.wav"
 ```
 
 [Back to Top](#table-of-contents)
