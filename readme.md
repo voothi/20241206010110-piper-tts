@@ -4,7 +4,7 @@ A command-line Python script to generate high-quality speech from text using the
 
 [![Version](https://img.shields.io/badge/version-v1.44.8-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This utility provides a simple interface to synthesize speech for multiple languages (English, German, Russian) and can be used as a standalone tool or as a backend for other applications, such as the [gTTS Player with Piper Fallback for Anki](https://github.com/voothi/20250421115831-anki-gtts-player).
+This utility provides a simple interface to synthesize speech for multiple languages (English, German, Russian) and can be used as a standalone tool or as a backend for other applications.
 
 ## Table of Contents
 
@@ -13,8 +13,9 @@ This utility provides a simple interface to synthesize speech for multiple langu
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Installation and Setup](#installation-and-setup)
-  - [Usage](#usage)
-  - [Integration](#integration)
+  - [Integrations](#integrations)
+    - [Anki Add-on Backend](#anki-add-on-backend)
+    - [System-Wide Hotkeys with AutoHotkey (AHKv2)](#system-wide-hotkeys-with-autohotkey-ahkv2)
   - [License](#license)
 
 ## Features
@@ -44,7 +45,7 @@ cd 202412060110-piper-tts
 
 **Step 2: Download Piper Engine and Voices**
 
-Go to the [**Releases Page**](https://github.com/voothi/202412060110-piper-tts/releases) and download the following files:
+Go to the [**Releases Page**](https://github.com/voothi/202412060110-piper-tts/releases) and download the following two files:
 -   `piper-windows-amd64.zip`
 -   `piper-voices-de-en-ru.zip`
 
@@ -76,12 +77,12 @@ Your final folder structure should look like this:
 
 Open a terminal in the project directory and run:
 ```bash
-pip install pyperclip```
+pip install pyperclip
+```
 
 **Step 5: Test the Installation**
 
-Run a test command to ensure everything is working correctly:
-```bash
+Run a test command to ensure everything is working correctly:```bash
 python piper_tts.py --lang en --text "Hello, world."
 ```
 You should hear the synthesized audio.
@@ -112,9 +113,18 @@ python piper_tts.py --lang en --text "This is a test." --output-file "C:\temp\te
 
 [Back to Top](#table-of-contents)
 
-## Integration
+## Integrations
 
-This script is the official backend for the [**gTTS Player with Piper Fallback for Anki**](https://github.com/voothi/20250421115831-anki-gtts-player) add-on. The add-on calls this utility with the `--output-file` argument to generate audio when an internet connection is not available.
+### Anki Add-on Backend
+
+This script serves as the official backend for the [**gTTS Player with Piper Fallback for Anki**](https://github.com/voothi/20250421115831-anki-gtts-player) add-on. The add-on calls this utility with the `--output-file` argument to generate audio when an internet connection is not available, providing a seamless offline TTS experience.
+
+### System-Wide Hotkeys with AutoHotkey (AHKv2)
+
+Beyond Anki, this script can be integrated into your desktop environment to provide system-wide text-to-speech functionality. By using the provided AutoHotkey v2 scripts, you can select text in any application and have it read aloud with a keyboard shortcut.
+
+-   [**tts.ahk**](https://github.com/voothi/20240411110510-autohotkey?tab=readme-ov-file#ttsahk): A script that triggers `piper_tts.py` to read the currently selected text using different hotkeys for each language (e.g., English, German, Russian).
+-   [**kill-ffplay.ahk**](https://github.com/voothi/20240411110510-autohotkey?tab=readme-ov-file#kill-ffplayahk): A utility hotkey to immediately terminate the audio playback, useful for stopping long sentences.
 
 [Back to Top](#table-of-contents)
 
