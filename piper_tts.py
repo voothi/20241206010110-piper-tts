@@ -1,97 +1,122 @@
 import subprocess
 import argparse
 import pyperclip
-from datetime import datetime
 import re
+import sys
+from pathlib import Path
 
 def get_clipboard_text():
+    """Gets text from the clipboard."""
     return pyperclip.paste()
 
 def set_clipboard_text(text):
+    """Sets text to the clipboard."""
     pyperclip.copy(text)
 
-def to_lower_case(input_string):
-    # Remove HTML tags and other hidden characters
-    cleaned_string = re.sub(r'<[^<]+?>', '', input_string)
+def sanitize_text(input_string):
+    """Removes HTML tags, control characters, and normalizes line breaks."""
+    # This function is kept simple for now, but can be expanded.
+    cleaned_string = re.sub(r'<[^>]+?>', '', input_string)
     cleaned_string = re.sub(r'[\x00-\x1F\x7F-\x9F]', '', cleaned_string)
-    # Replace new lines with spaces, except when a new line follows a space
-    cleaned_string = re.sub(r'\n(?!\s)', ' ', cleaned_string)
-    return cleaned_string.lower()
+    cleaned_string = cleaned_string.replace('\n', ' ').strip()
+    return cleaned_string
 
 def main():
-    # Set up argument parsing
+    """Main function to run Piper TTS."""
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
-    parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en" for English, "de" for German, "ru" for Russian)')
+    parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en", "de", "ru")')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, help='Text to synthesize')
-    parser.add_argument('--clipboard', action='store_true', help='Read text from clipboard and copy synthesized text to the clipboard')
-    parser.add_argument('--save-only', action='store_true', help='Save audio output without playback')
+    parser.add_argument('--clipboard', action='store_true', help='Read text from clipboard')
+    
+    # New argument for Anki integration.
+    # It specifies the full path where the audio file should be saved.
+    parser.add_argument('--output-file', type=str, help='Full path to save the output WAV file. If provided, playback is skipped.')
 
     args = parser.parse_args()
     
-    # Determine the text to synthesize
-    if args.clipboard:
+    # --- Determine the text to synthesize ---
+    if args.text:
+        text_to_synthesize = sanitize_text(args.text)
+    elif args.clipboard:
         clipboard_text = get_clipboard_text()
         if not clipboard_text:
-            parser.error('Clipboard is empty')
-        text_to_synthesize = to_lower_case(clipboard_text)
+            print("Error: --clipboard flag was used, but the clipboard is empty.", file=sys.stderr)
+            sys.exit(1)
+        text_to_synthesize = sanitize_text(clipboard_text)
     else:
-        if args.text is None:
-            parser.error('The --text argument must be provided if --clipboard is not used')
-        text_to_synthesize = args.text
+        parser.error('Either the --text or --clipboard argument must be provided.')
+
+    # --- Define model paths ---
+    base_path = Path("U:/voothi/20241206010110-piper-tts")
+    piper_exe_path = base_path / "piper" / "piper.exe"
     
-    # Define model paths based on the --lang argument (assuming a default model for each language)
-    if args.lang == 'en':
-        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
-        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx'
-        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json'
-    elif args.lang == 'de':
-        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
-        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx'
-        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json'
-    elif args.lang == 'ru':
-        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
-        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx'
-        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json'
-    else:
-        print(f"Unsupported language: {args.lang}. Please use 'en', 'de', or 'ru'.")
-        return
+    model_paths = {
+        'en': {
+            'model': base_path / "piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx",
+            'config': base_path / "piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json"
+        },
+        'de': {
+            'model': base_path / "piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx",
+            'config': base_path / "piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json"
+        },
+        'ru': {
+            'model': base_path / "piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
+            'config': base_path / "piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json"
+        }
+    }
     
-    # Determine output file path
-    if args.save_only:
-        # Generate timestamp in the format YYYYMMDDHHMMSS for output file
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        output_file = f'C:/Tools/piper-tts/{timestamp}-output.wav'
-        print(f"Audio will be saved to: {output_file}")
-    else:
-        output_file = r'U:/voothi/20241206010110-piper-tts/output.wav'
+    if args.lang not in model_paths:
+        print(f"Error: Unsupported language '{args.lang}'. Supported languages are: {list(model_paths.keys())}", file=sys.stderr)
+        sys.exit(1)
+
+    selected_model = model_paths[args.lang]
     
-    # Create the command to run the Piper TTS with the --speaker option
+    # --- Determine output file path ---
+    # If --output-file is provided (by Anki), use it directly.
+    # Otherwise, fall back to the default for standalone use.
+    output_file = args.output_file if args.output_file else str(base_path / "output.wav")
+    
+    # --- Build and run the Piper command ---
     command = [
-        piper_path,
-        '--model', model_path,
-        '--config', config_path,
+        str(piper_exe_path),
+        '--model', str(selected_model['model']),
+        '--config', str(selected_model['config']),
         '--output_file', output_file,
         '--speaker', str(args.speaker)
     ]
     
-    # Synthesize the speech
-    print(f'Synthesizing text: "{text_to_synthesize}"')
+    print(f'Piper TTS: Synthesizing "{text_to_synthesize}"...')
     
-    # Call Piper TTS
-    subprocess.run(command, input=text_to_synthesize, text=True)
-    
-    if not args.save_only:
-        # Play the output audio using ffplay only if save_only is not used
+    try:
+        # We use subprocess.run to execute the command.
+        # The text is passed via standard input (stdin).
+        # We capture the output to check for errors.
+        process = subprocess.run(
+            command, 
+            input=text_to_synthesize, 
+            text=True, 
+            encoding='utf-8', 
+            capture_output=True,
+            check=True  # This will raise CalledProcessError if the return code is non-zero
+        )
+    except FileNotFoundError:
+        print(f"Error: Could not find piper.exe at '{piper_exe_path}'. Please check the path.", file=sys.stderr)
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print("Error: Piper process failed.", file=sys.stderr)
+        print(f"Return Code: {e.returncode}", file=sys.stderr)
+        print(f"Stderr: {e.stderr}", file=sys.stderr)
+        sys.exit(1)
+        
+    print(f'Successfully created audio file at: {output_file}')
+
+    # --- Play audio only if NOT called for Anki (i.e., --output-file is not set) ---
+    if not args.output_file:
         ffplay_path = r'C:/Tools/ffmpeg/ffmpeg-7.1-essentials_build/bin/ffplay.exe'
         play_command = [ffplay_path, '-nodisp', '-autoexit', output_file]
         print(f'Playing audio: {output_file}')
-        subprocess.run(play_command)
-    
-    # Copy the synthesized text to the clipboard if --clipboard is specified
-    if args.clipboard:
-        set_clipboard_text(text_to_synthesize)
-        print(f"Copied text to clipboard: \"{text_to_synthesize}\"")
+        subprocess.run(play_command, capture_output=True)
 
 if __name__ == '__main__':
     main()
