@@ -1,10 +1,10 @@
 # Piper TTS Command-Line Utility
 
-A simple and powerful command-line interface for the Piper TTS engine.
+A command-line Python script to generate high-quality speech from text using the Piper TTS engine.
 
 [![Version](https://img.shields.io/badge/version-v1.1-blue)](https://github.com/voothi/20241206010110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This Python script acts as a wrapper around the `piper.exe` engine, allowing you to easily generate high-quality speech from text. It is designed for both standalone use and as a backend for other applications, most notably the [gTTS Player with Piper Fallback](https://github.com/voothi/20250421115831-anki-gtts-player) Anki add-on.
+This utility provides a simple interface to synthesize speech for multiple languages (English, German, Russian) and can be used as a standalone tool or as a backend for other applications, such as the [gTTS Player with Piper Fallback for Anki](https://github.com/voothi/20250421115831-anki-gtts-player).
 
 ## Table of Contents
 
@@ -13,72 +13,73 @@ This Python script acts as a wrapper around the `piper.exe` engine, allowing you
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Command-Line Arguments](#command-line-arguments)
-  - [Related Projects](#related-projects)
+  - [Usage](#usage)
+  - [Integration](#integration)
   - [License](#license)
 
 ## Features
 
--   Synthesize text to speech using local Piper models.
--   Support for multiple languages (easily configurable by adding models).
--   Accept text directly from a command-line argument or from the system clipboard.
--   Save generated audio to a specified `.wav` file path.
--   Includes optional standalone playback via `ffplay` for quick testing.
+-   **Multi-Language Support**: Pre-configured for English, German, and Russian voices.
+-   **Flexible Input**: Synthesize text provided directly as an argument or from the system clipboard.
+-   **File Output**: Save the generated audio to a specified file path, ideal for integration with other scripts.
+-   **Standalone Playback**: Instantly play back the generated audio for quick tests.
 
 [Back to Top](#table-of-contents)
 
 ## Prerequisites
 
-1.  **Python 3**: Must be installed on your system.
-2.  **Piper TTS Engine**: You need the `piper.exe` executable and the required voice models (`.onnx` and `.json` files).
-3.  **(Optional) FFmpeg**: For audio playback directly from the script, `ffplay.exe` (part of FFmpeg) should be in your system's PATH or located at the path specified in the script.
+1.  **Python 3**: Python 3 must be installed on your system.
+2.  **Piper TTS Engine**: The repository includes the Piper executable and voice models. No separate download of Piper is needed.
+3.  **FFplay (Optional)**: For direct audio playback, `ffplay.exe` (part of FFmpeg) should be available on your system.
 
 ## Installation
 
-1.  **Clone the Repository**:
+1.  Clone this repository:
     ```bash
     git clone https://github.com/voothi/20241206010110-piper-tts.git
+    ```
+2.  Navigate to the repository folder:
+    ```bash
     cd 20241206010110-piper-tts
     ```
-
-2.  **Set up Piper Files**:
-    -   Place the `piper.exe` executable inside the `piper` directory.
-    -   Place your downloaded voice models inside the `piper-voices` directory, maintaining a structure like `piper-voices/<lang>/...`.
-
-3.  **Install Python Dependencies**:
+3.  Install the required Python library:
     ```bash
     pip install pyperclip
     ```
-
-4.  **Test the Script**:
-    Run a test command from your terminal to ensure everything is working.
-    ```bash
-    # Example for Windows
-    C:\Python\Python312\python.exe piper_tts.py --lang en --text "Hello world"
-    ```
-    This should generate an `output.wav` file and play it if `ffplay` is available.
+4.  Test the script from your terminal. Ensure the paths inside `piper_tts.py` are correct for your system if you move the folders.
 
 [Back to Top](#table-of-contents)
 
-## Command-Line Arguments
+## Usage
 
-The script is controlled via the following command-line arguments.
+The script is controlled via command-line arguments.
 
-| Argument         | Description                                                                              | Required |
-| ---------------- | ---------------------------------------------------------------------------------------- | :------: |
-| `--lang`         | Two-letter language code (e.g., `en`, `de`, `ru`). Must match a configured model.          |   Yes    |
-| `--speaker`      | The speaker ID for the selected model. Defaults to `0`.                                  |    No    |
-| `--text`         | The string of text to synthesize.                                                        |    No*   |
-| `--clipboard`    | If present, read text from the system clipboard instead of from `--text`.                |    No*   |
-| `--output-file`  | Full path to save the output `.wav` file. If provided, audio playback is skipped.        |    No    |
+| Argument          | Description                                                              | Required |
+| ----------------- | ------------------------------------------------------------------------ | :------: |
+| `--lang`          | Language code: `en`, `de`, or `ru`.                                      |   Yes    |
+| `--text`          | The text string to synthesize.                                           |    No    |
+| `--clipboard`     | If present, use the text currently in the system clipboard as input.     |    No    |
+| `--output-file`   | Full path to save the output `.wav` file. Disables auto-playback.        |    No    |
+| `--speaker`       | The speaker ID to use (default is `0`).                                  |    No    |
 
-_*One of `--text` or `--clipboard` must be provided._
+**Example Commands:**
+
+```bash
+# Synthesize German text and play it back immediately
+python piper_tts.py --lang de --text "Hallo, wie geht es Ihnen?"
+
+# Synthesize Russian text from the clipboard and play it back
+python piper_tts.py --lang ru --clipboard
+
+# Synthesize English text and save it to a specific file for Anki (no playback)
+python piper_tts.py --lang en --text "This is a test." --output-file "C:\Users\user\Desktop\anki_audio.wav"
+```
 
 [Back to Top](#table-of-contents)
 
-## Related Projects
+## Integration
 
--   [**gTTS Player with Piper Fallback for Anki**](https://github.com/voothi/20250421115831-anki-gtts-player): This script is a core dependency for this Anki add-on, providing its essential offline TTS capabilities.
+This script is the official backend for the [**gTTS Player with Piper Fallback for Anki**](https://github.com/voothi/20250421115831-anki-gtts-player) add-on. The add-on calls this utility with the `--output-file` argument to generate audio when an internet connection is not available.
 
 [Back to Top](#table-of-contents)
 
