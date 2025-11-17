@@ -46,9 +46,7 @@ cd 202412060110-piper-tts
 
 Go to the [**Releases Page**](https://github.com/voothi/202412060110-piper-tts/releases) and download the following files:
 -   `piper-windows-amd64.zip`
--   `piper-voices-en.zip`
--   `piper-voices-de.zip`
--   `piper-voices-ru.zip`
+-   `piper-voices-de-en-ru.zip`
 
 **Step 3: Unzip and Organize Files**
 
