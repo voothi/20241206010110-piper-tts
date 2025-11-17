@@ -13,6 +13,7 @@ This utility provides a simple interface to synthesize speech for multiple langu
   - [Features](#features)
   - [Prerequisites](#prerequisites)
   - [Installation and Setup](#installation-and-setup)
+  - [Usage](#usage)
   - [Integrations](#integrations)
     - [Anki Add-on Backend](#anki-add-on-backend)
     - [System-Wide Hotkeys with AutoHotkey (AHKv2)](#system-wide-hotkeys-with-autohotkey-ahkv2)
@@ -45,7 +46,7 @@ cd 202412060110-piper-tts
 
 **Step 2: Download Piper Engine and Voices**
 
-Go to the [**Releases Page**](https://github.com/voothi/202412060110-piper-tts/releases) and download the following two files:
+Go to the [**Releases Page**](https://github.com/voothi/20241206010110-piper-tts/releases) and download the following two files:
 -   `piper-windows-amd64.zip`
 -   `piper-voices-de-en-ru.zip`
 
@@ -82,7 +83,8 @@ pip install pyperclip
 
 **Step 5: Test the Installation**
 
-Run a test command to ensure everything is working correctly:```bash
+Run a test command to ensure everything is working correctly:
+```bash
 python piper_tts.py --lang en --text "Hello, world."
 ```
 You should hear the synthesized audio.
