@@ -2,7 +2,7 @@
 
 A command-line Python script to generate high-quality speech from text using the Piper TTS engine.
 
-[![Version](https://img.shields.io/badge/version-v1.1-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v1.44.8-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This utility provides a simple interface to synthesize speech for multiple languages (English, German, Russian) and can be used as a standalone tool or as a backend for other applications, such as the [gTTS Player with Piper Fallback for Anki](https://github.com/voothi/20250421115831-anki-gtts-player).
 
