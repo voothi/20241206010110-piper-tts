@@ -42,17 +42,17 @@ def main():
     
     # Define model paths based on the --lang argument (assuming a default model for each language)
     if args.lang == 'en':
-        piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
-        model_path = r'C:\Tools\piper-tts\piper-voices\en\en_US\ljspeech\high\en_US-ljspeech-high.onnx'
-        config_path = r'C:\Tools\piper-tts\piper-voices\en\en_US\ljspeech\high\en_US-ljspeech-high.onnx.json'
+        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
+        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx'
+        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json'
     elif args.lang == 'de':
-        piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
-        model_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\pavoque\low\de_DE-pavoque-low.onnx'
-        config_path = r'C:\Tools\piper-tts\piper-voices\de\de_DE\pavoque\low\de_DE-pavoque-low.onnx.json'
+        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
+        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx'
+        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json'
     elif args.lang == 'ru':
-        piper_path = r'C:\Tools\piper-tts\piper\piper.exe'
-        model_path = r'C:\Tools\piper-tts\piper-voices\ru\ru_RU\irina\medium\ru_RU-irina-medium.onnx'
-        config_path = r'C:\Tools\piper-tts\piper-voices\ru\ru_RU\irina\medium\ru_RU-irina-medium.onnx.json'
+        piper_path = r'U:/voothi/20241206010110-piper-tts/piper/piper.exe'
+        model_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx'
+        config_path = r'U:/voothi/20241206010110-piper-tts/piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json'
     else:
         print(f"Unsupported language: {args.lang}. Please use 'en', 'de', or 'ru'.")
         return
@@ -61,10 +61,10 @@ def main():
     if args.save_only:
         # Generate timestamp in the format YYYYMMDDHHMMSS for output file
         timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        output_file = f'C:\\Tools\\piper-tts\\{timestamp}-output.wav'
+        output_file = f'C:/Tools/piper-tts/{timestamp}-output.wav'
         print(f"Audio will be saved to: {output_file}")
     else:
-        output_file = r'C:\Tools\piper-tts\output.wav'
+        output_file = r'U:/voothi/20241206010110-piper-tts/output.wav'
     
     # Create the command to run the Piper TTS with the --speaker option
     command = [
@@ -83,7 +83,7 @@ def main():
     
     if not args.save_only:
         # Play the output audio using ffplay only if save_only is not used
-        ffplay_path = r'C:\Tools\ffmpeg\ffmpeg-7.1-essentials_build\bin\ffplay.exe'
+        ffplay_path = r'C:/Tools/ffmpeg/ffmpeg-7.1-essentials_build/bin/ffplay.exe'
         play_command = [ffplay_path, '-nodisp', '-autoexit', output_file]
         print(f'Playing audio: {output_file}')
         subprocess.run(play_command)
