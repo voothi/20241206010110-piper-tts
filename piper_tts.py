@@ -1,21 +1,55 @@
+// piper_tts.py
 import subprocess
 import argparse
 import pyperclip
 import re
 import sys
+import configparser
 from pathlib import Path
+
+# --- Constants ---
+PROJECT_ROOT = Path(__file__).resolve().parent
+CONFIG_FILE = PROJECT_ROOT / "config.ini"
+
+def load_configuration(config_path):
+    """Loads configuration from the INI file."""
+    if not config_path.exists():
+        print(f"Error: Configuration file not found at '{config_path}'.", file=sys.stderr)
+        print("Please copy 'config.ini.template' to 'config.ini' and configure it.", file=sys.stderr)
+        sys.exit(1)
+    
+    config = configparser.ConfigParser()
+    config.read(config_path)
+    return config
+
+def load_models_from_config(config, project_root):
+    """Dynamically builds the model paths dictionary from the config object."""
+    model_paths = {}
+    try:
+        supported_langs = [lang.strip() for lang in config.get('tts_settings', 'supported_languages').split(',')]
+        voices_dir = project_root / config.get('paths', 'voices_directory')
+
+        for lang in supported_langs:
+            section_name = f'voice_{lang}'
+            if config.has_section(section_name):
+                model_paths[lang] = {
+                    'model': voices_dir / config.get(section_name, 'model'),
+                    'config': voices_dir / config.get(section_name, 'config')
+                }
+            else:
+                print(f"Warning: Language '{lang}' is listed in supported_languages but section '[{section_name}]' is missing in config.", file=sys.stderr)
+    except (configparser.NoSectionError, configparser.NoOptionError) as e:
+        print(f"Error: Missing configuration in '{CONFIG_FILE}': {e}", file=sys.stderr)
+        sys.exit(1)
+        
+    return model_paths
 
 def get_clipboard_text():
     """Gets text from the clipboard."""
     return pyperclip.paste()
 
-def set_clipboard_text(text):
-    """Sets text to the clipboard."""
-    pyperclip.copy(text)
-
 def sanitize_text(input_string):
     """Removes HTML tags, control characters, and normalizes line breaks."""
-    # This function is kept simple for now, but can be expanded.
     cleaned_string = re.sub(r'<[^>]+?>', '', input_string)
     cleaned_string = re.sub(r'[\x00-\x1F\x7F-\x9F]', '', cleaned_string)
     cleaned_string = cleaned_string.replace('\n', ' ').strip()
@@ -23,16 +57,18 @@ def sanitize_text(input_string):
 
 def main():
     """Main function to run Piper TTS."""
+    config = load_configuration(CONFIG_FILE)
+    model_paths = load_models_from_config(config, PROJECT_ROOT)
+    
+    default_lang = config.get('tts_settings', 'default_lang', fallback='en')
+    
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
-    parser.add_argument('--lang', type=str, required=True, help='Language code (e.g., "en", "de", "ru")')
+    parser.add_argument('--lang', type=str, default=default_lang, help=f'Language code (e.g., "en", "de"). Supported: {list(model_paths.keys())}. Default: {default_lang}')
     parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
     parser.add_argument('--text', type=str, help='Text to synthesize')
     parser.add_argument('--clipboard', action='store_true', help='Read text from clipboard')
-    
-    # New argument for Anki integration.
-    # It specifies the full path where the audio file should be saved.
     parser.add_argument('--output-file', type=str, help='Full path to save the output WAV file. If provided, playback is skipped.')
-
+    
     args = parser.parse_args()
     
     # --- Determine the text to synthesize ---
@@ -47,35 +83,19 @@ def main():
     else:
         parser.error('Either the --text or --clipboard argument must be provided.')
 
-    # --- Define model paths ---
-    base_path = Path("U:/voothi/20241206010110-piper-tts")
-    piper_exe_path = base_path / "piper" / "piper.exe"
-    
-    model_paths = {
-        'en': {
-            'model': base_path / "piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx",
-            'config': base_path / "piper-voices/en/en_US/ljspeech/high/en_US-ljspeech-high.onnx.json"
-        },
-        'de': {
-            'model': base_path / "piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx",
-            'config': base_path / "piper-voices/de/de_DE/pavoque/low/de_DE-pavoque-low.onnx.json"
-        },
-        'ru': {
-            'model': base_path / "piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx",
-            'config': base_path / "piper-voices/ru/ru_RU/irina/medium/ru_RU-irina-medium.onnx.json"
-        }
-    }
-    
+    # --- Validate language and get model paths ---
     if args.lang not in model_paths:
-        print(f"Error: Unsupported language '{args.lang}'. Supported languages are: {list(model_paths.keys())}", file=sys.stderr)
+        print(f"Error: Unsupported language '{args.lang}'. Supported languages are defined in config.ini: {list(model_paths.keys())}", file=sys.stderr)
         sys.exit(1)
-
+    
     selected_model = model_paths[args.lang]
     
+    # --- Get paths from config ---
+    piper_exe_path = PROJECT_ROOT / config.get('paths', 'piper_executable')
+    default_output_filename = config.get('paths', 'default_output_filename')
+    
     # --- Determine output file path ---
-    # If --output-file is provided (by Anki), use it directly.
-    # Otherwise, fall back to the default for standalone use.
-    output_file = args.output_file if args.output_file else str(base_path / "output.wav")
+    output_file = args.output_file if args.output_file else str(PROJECT_ROOT / default_output_filename)
     
     # --- Build and run the Piper command ---
     command = [
@@ -89,19 +109,16 @@ def main():
     print(f'Piper TTS: Synthesizing "{text_to_synthesize}"...')
     
     try:
-        # We use subprocess.run to execute the command.
-        # The text is passed via standard input (stdin).
-        # We capture the output to check for errors.
         process = subprocess.run(
             command, 
             input=text_to_synthesize, 
             text=True, 
             encoding='utf-8', 
             capture_output=True,
-            check=True  # This will raise CalledProcessError if the return code is non-zero
+            check=True
         )
     except FileNotFoundError:
-        print(f"Error: Could not find piper.exe at '{piper_exe_path}'. Please check the path.", file=sys.stderr)
+        print(f"Error: Could not find piper.exe at '{piper_exe_path}'. Please check the 'piper_executable' path in config.ini.", file=sys.stderr)
         sys.exit(1)
     except subprocess.CalledProcessError as e:
         print("Error: Piper process failed.", file=sys.stderr)
@@ -111,12 +128,20 @@ def main():
         
     print(f'Successfully created audio file at: {output_file}')
 
-    # --- Play audio only if NOT called for Anki (i.e., --output-file is not set) ---
+    # --- Play audio only if not saving to a specific output file ---
     if not args.output_file:
-        ffplay_path = r'C:/Tools/ffmpeg/ffmpeg-7.1-essentials_build/bin/ffplay.exe'
-        play_command = [ffplay_path, '-nodisp', '-autoexit', output_file]
-        print(f'Playing audio: {output_file}')
-        subprocess.run(play_command, capture_output=True)
+        ffplay_path = config.get('paths', 'ffplay_executable', fallback='').strip()
+        if ffplay_path:
+            play_command = [ffplay_path, '-nodisp', '-autoexit', output_file]
+            print(f'Playing audio: {output_file}')
+            try:
+                subprocess.run(play_command, capture_output=True, check=False)
+            except FileNotFoundError:
+                print(f"Warning: Could not find ffplay.exe at '{ffplay_path}'. Playback skipped.", file=sys.stderr)
+                print("Please check the 'ffplay_executable' path in config.ini or leave it empty to disable playback.", file=sys.stderr)
+        else:
+            print("Playback skipped: 'ffplay_executable' is not set in config.ini.")
+
 
 if __name__ == '__main__':
     main()
