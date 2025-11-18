@@ -1,4 +1,3 @@
-// piper_tts.py
 import subprocess
 import argparse
 import pyperclip
