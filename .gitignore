@@ -94,5 +94,14 @@ dist/
 piper-voices/
 piper/
 
-*.wav
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
 
+# User-specific configuration
+# Keep the template, but ignore the user's copy
+config.ini
+
+# Output files
+*.wav
