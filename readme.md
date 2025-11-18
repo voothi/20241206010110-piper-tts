@@ -70,6 +70,7 @@ Your final folder structure should look like this:
 │   ├── de/
 │   ├── en/
 │   └── ru/
+├── config.ini
 ├── config.ini.template
 ├── piper_tts.py
 └── README.md
