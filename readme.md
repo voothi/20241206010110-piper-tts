@@ -20,6 +20,8 @@ This utility provides a simple, configurable interface to synthesize speech for 
     - [System-Wide Hotkeys with AutoHotkey (AHKv2)](#system-wide-hotkeys-with-autohotkey-ahkv2)
   - [License](#license)
 
+---
+
 ## Features
 
 -   **Configuration-Driven**: All paths and settings are managed in an easy-to-edit `config.ini` file.
