@@ -18,6 +18,7 @@ This utility provides a simple, configurable interface to synthesize speech for 
   - [Integrations](#integrations)
     - [Anki Add-on Backend](#anki-add-on-backend)
     - [System-Wide Hotkeys with AutoHotkey (AHKv2)](#system-wide-hotkeys-with-autohotkey-ahkv2)
+  - [Kardenwort Ecosystem](#kardenwort-ecosystem)
   - [License](#license)
 
 ## Features
@@ -154,6 +155,12 @@ Beyond Anki, this script can be integrated into your desktop environment to prov
 -   [**kill-ffplay.ahk**](https://github.com/voothi/20240411110510-autohotkey?tab=readme-ov-file#kill-ffplayahk): A utility hotkey to immediately terminate the audio playback, useful for stopping long sentences.
 
 [Back to Top](#table-of-contents)
+
+## Kardenwort Ecosystem
+
+This project is part of the **[Kardenwort](https://github.com/kardenwort)** environment, designed to create a focused and efficient learning ecosystem.
+
+[Return to Top](#table-of-contents)
 
 ## License
 
