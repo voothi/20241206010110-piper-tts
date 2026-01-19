@@ -32,7 +32,7 @@ This utility provides a simple, configurable interface to synthesize speech for 
 -   **File Output**: Save the generated audio to a specified file path.
 -   **Standalone Playback**: Instantly play back the generated audio for quick tests.
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
 
 ## Prerequisites
 
@@ -98,7 +98,7 @@ python piper_tts.py --text "Hello, world."
 ```
 You should hear the synthesized audio.
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
 
 ## Configuration
 
@@ -114,17 +114,17 @@ All script settings are managed in `config.ini`. The most important setting to c
 -   **`[voice_*]` sections**:
     -   Each section defines the model and config files for a specific language. To add a new voice, add it to `supported_languages` and create a corresponding `[voice_...]` section.
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
 
 ## Usage
 
-| Argument          | Description                                                              | Required |
-| ----------------- | ------------------------------------------------------------------------ | :------: |
-| `--lang`          | Language code. If omitted, uses the default from `config.ini`.           |    No    |
-| `--text`          | The text string to synthesize.                                           |    No    |
-| `--clipboard`     | If present, use the text currently in the system clipboard as input.     |    No    |
-| `--output-file`   | Full path to save the output `.wav` file. Disables auto-playback.        |    No    |
-| `--speaker`       | The speaker ID to use (default is `0`).                                  |    No    |
+| Argument        | Description                                                          | Required |
+| --------------- | -------------------------------------------------------------------- | :------: |
+| `--lang`        | Language code. If omitted, uses the default from `config.ini`.       |    No    |
+| `--text`        | The text string to synthesize.                                       |    No    |
+| `--clipboard`   | If present, use the text currently in the system clipboard as input. |    No    |
+| `--output-file` | Full path to save the output `.wav` file. Disables auto-playback.    |    No    |
+| `--speaker`     | The speaker ID to use (default is `0`).                              |    No    |
 
 *Note: You must provide either `--text` or `--clipboard`.*
 
@@ -141,7 +141,7 @@ python piper_tts.py --clipboard
 python piper_tts.py --lang en --text "This is a test." --output-file "C:\temp\test_audio.wav"
 ```
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
 
 ## Integrations
 
@@ -156,7 +156,7 @@ Beyond Anki, this script can be integrated into your desktop environment to prov
 -   [**tts.ahk**](https://github.com/voothi/20240411110510-autohotkey?tab=readme-ov-file#ttsahk): A script that triggers `piper_tts.py` to read the currently selected text using different hotkeys for each language (e.g., English, German, Russian).
 -   [**kill-ffplay.ahk**](https://github.com/voothi/20240411110510-autohotkey?tab=readme-ov-file#kill-ffplayahk): A utility hotkey to immediately terminate the audio playback, useful for stopping long sentences.
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
 
 ## Kardenwort Ecosystem
 
@@ -168,4 +168,4 @@ This project is part of the **[Kardenwort](https://github.com/kardenwort)** envi
 
 [MIT](./LICENSE)
 
-[Back to Top](#table-of-contents)
+[Return to Top](#table-of-contents)
