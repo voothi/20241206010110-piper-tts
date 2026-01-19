@@ -63,7 +63,7 @@ def main():
     
     parser = argparse.ArgumentParser(description='Text-to-Speech using Piper TTS')
     parser.add_argument('--lang', type=str, default=default_lang, help=f'Language code (e.g., "en", "de"). Supported: {list(model_paths.keys())}. Default: {default_lang}')
-    parser.add_argument('--speaker', type=int, default=0, help='Speaker ID (default is 0)')
+    parser.add_argument('--speaker', type=int, help='Speaker ID (overrides config.ini setting)')
     parser.add_argument('--text', type=str, help='Text to synthesize')
     parser.add_argument('--clipboard', action='store_true', help='Read text from clipboard')
     parser.add_argument('--output-file', type=str, help='Full path to save the output WAV file. If provided, playback is skipped.')
@@ -89,6 +89,12 @@ def main():
     
     selected_model = model_paths[args.lang]
     
+    # --- Determine speaker ID (CLI argument overrides config.ini) ---
+    speaker_id = args.speaker
+    if speaker_id is None:
+        section_name = f'voice_{args.lang}'
+        speaker_id = config.getint(section_name, 'speaker', fallback=0)
+
     # --- Get paths from config ---
     piper_exe_path = PROJECT_ROOT / config.get('paths', 'piper_executable')
     default_output_filename = config.get('paths', 'default_output_filename')
@@ -102,7 +108,7 @@ def main():
         '--model', str(selected_model['model']),
         '--config', str(selected_model['config']),
         '--output_file', output_file,
-        '--speaker', str(args.speaker)
+        '--speaker', str(speaker_id)
     ]
     
     print(f'Piper TTS: Synthesizing "{text_to_synthesize}"...')

@@ -2,7 +2,7 @@
 
 A command-line Python script to generate high-quality speech from text using the Piper TTS engine.
 
-[![Version](https://img.shields.io/badge/version-v1.46.2-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-v1.48.2-blue)](https://github.com/voothi/202412060110-piper-tts) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This utility provides a simple, configurable interface to synthesize speech for multiple languages and can be used as a standalone tool or as a backend for other applications. All paths and model settings are managed in a central `config.ini` file for easy customization.
 
@@ -112,7 +112,10 @@ All script settings are managed in `config.ini`. The most important setting to c
     -   `supported_languages`: A comma-separated list of language codes you want to use.
     -   `default_lang`: The language to use if you don't specify one with the `--lang` flag.
 -   **`[voice_*]` sections**:
-    -   Each section defines the model and config files for a specific language. To add a new voice, add it to `supported_languages` and create a corresponding `[voice_...]` section.
+    -   Each section defines the model and config files for a specific language.
+    -   `model`: Path to the `.onnx` model file (relative to `voices_directory`).
+    -   `config`: Path to the `.onnx.json` config file (relative to `voices_directory`).
+    -   `speaker` (Optional): The default speaker ID for this model (e.g., `speaker = 1` for Mykyta in the Ukrainian model). Defaults to `0` if omitted.
 
 [Return to Top](#table-of-contents)
 
@@ -139,6 +142,9 @@ python piper_tts.py --clipboard
 
 # Synthesize English text and save it to a file (no playback)
 python piper_tts.py --lang en --text "This is a test." --output-file "C:\temp\test_audio.wav"
+
+# Synthesize Ukrainian text using the "Mykyta" voice (Speaker 1)
+python piper_tts.py --lang uk --speaker 1 --text "Слава Україні!"
 ```
 
 [Return to Top](#table-of-contents)
