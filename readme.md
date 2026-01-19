@@ -102,7 +102,9 @@ You should hear the synthesized audio.
 
 ## Configuration
 
-All script settings are managed in `config.ini`. The most important setting to check is `ffplay_executable`.
+All script settings are managed in `config.ini`. Note that `config.ini` is ignored by Git; you should copy `config.ini.template` to `config.ini` for your local setup.
+
+The most important setting to check is `ffplay_executable`.
 
 -   **`[paths]` section**:
     -   `piper_executable`: Path to `piper.exe` relative to the project root. The default should be correct if you followed the setup guide.
